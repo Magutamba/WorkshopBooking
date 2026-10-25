@@ -54,14 +54,11 @@ public class Booking {
 //        return "book;"+memberName+";"+workshopName+";"+date+";"+time;
 //    }
     public String serverMsg(){
-        return memberName+"currently has"++"booking:"+workshopName+" on"+date+" at "+time;
+        return workshopName+" on"+date+" at "+time;
     }
     
-    public String cancelMsg(){
-        return 
-    }
-    public String bookingsMsg(){
-        return 
+    public String saveFormat(){
+        return memberName+";"+workshopName+";"+date+";"+time;
     }
 }
 
