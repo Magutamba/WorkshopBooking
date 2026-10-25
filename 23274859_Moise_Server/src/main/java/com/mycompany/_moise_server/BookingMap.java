@@ -13,61 +13,97 @@ import java.util.Map;
  * @author moise
  */
 public class BookingMap {
+
     //linked hash map for sorted collection
-    HashMap<Long,Booking> bookings;
+    HashMap<Long, Booking> bookings;
     private static long id = 2000;
-    
-    public BookingMap(){
+
+    public BookingMap() {
         bookings = new LinkedHashMap<>();
     }
+
     //add a new booking
-    public void book(Booking b){
-        id ++;
-        bookings.put(id,b);
-        
+    public String book(Booking b) {
+        id++;
+        //add the new booking to the linkedHashMap
+        bookings.put(id, b);
+        //get number of bookings
+        int numOfBookings = countBookings(b.getMemberName());
+        return b.getMemberName() + "currently has" +numOfBookings+"bookings:" + b.serverMsg() + "\n-;";
+
     }
-    
+
     //remove a booking
-    public void cancel(Booking b){
+    public String cancel(Booking b) {
+        String result;
         //iterate through map
-        for(Map.Entry<Long,Booking> entry:bookings.entrySet()){
+        for (Map.Entry<Long, Booking> entry : bookings.entrySet()) {
             long id = entry.getKey();
             Booking value = entry.getValue();
             //remove booking that matches the booking passed into the method
-            if(value.equals(b)){
+            if (value.getMemberName().equalsIgnoreCase(b.getMemberName()) 
+                    && value.getWorkshopName().equalsIgnoreCase(b.getWorkshopName()) 
+                           &&  value.getDate().equalsIgnoreCase(b.getDate())
+                           && value.getTime().equalsIgnoreCase(b.getTime()) )
+            {
+                //remove the booking
                 bookings.remove(id);
+                //get the current number of bookings
+                int numOfBookings = countBookings(b.getMemberName());
+                result= "Cancelled. " + b.getMemberName() + "currently has "+numOfBookings + " booking"+b.serverMsg()+"\n-;";
             }
         }
+        return result;
     }
     
     //list all the person's booking
-    public String list(String name){
+    public String list(String memberName) {
+        //get the number of bookings
+        int numOfBookings = countBookings(memberName);
+        
+         //string buffer to create
+         StringBuffer result = new StringBuffer();
+         
+         result.append(memberName);
+         result.append(" currently as ");
+         //if  numOfBookings is 1 singular booking otherwise bookings
+         result.append(numOfBookings==1 ? " booking: " : " bookings: ");
+         
         //empty string to hold bookings
-        String item =  "";
+        String item = "";
+        
+        //variable to ensure ; isnlt put before first booking
+        boolean first=true;
+        
         //iterate through map
-        for(Map.Entry<Long,Booking> entry:bookings.entrySet()){
-            long id = entry.getKey();
+        for (Map.Entry<Long, Booking> entry : bookings.entrySet()) {
+            //get booking
             Booking value = entry.getValue();
-            Booking tempVal ;
             //add bookings to
-            if(value.getMemberName().equals(name)){
-                item+=bookings.get(id)+"-;";
-                
+            if (value.getMemberName().equalsIgnoreCase(memberName)) {
+                //after the first booking
+                if(!first){
+                    result.append(" -; ");
+                }
+                result.append(value.serverMsg());
+                //set to false so next bookings have semicolon
+                first=false;
             }
         }
-        return item;
+        return result.toString();
     }
-    
+
     //count number of bookings
-    public int countBookings(String name){
-        int count=0;
+    public int countBookings(String name) {
+        int count = 0;
         
-        for(Map.Entry<Long, Booking> entry: bookings.entrySet()){
+        for (Map.Entry<Long, Booking> entry : bookings.entrySet()) {
             Booking value = entry.getValue();
-            if(value.getMemberName().equalsIgnoreCase(name)){
+            if (value.getMemberName().equalsIgnoreCase(name)) {
                 count++;
             }
         }
+        //return number of bookings
         return count;
     }
 }
