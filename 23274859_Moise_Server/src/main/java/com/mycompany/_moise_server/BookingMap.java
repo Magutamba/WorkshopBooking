@@ -35,7 +35,7 @@ public class BookingMap {
 
     //remove a booking
     public String cancel(Booking b) {
-        String result;
+        String result = "";
         //iterate through map
         for (Map.Entry<Long, Booking> entry : bookings.entrySet()) {
             long id = entry.getKey();
@@ -50,7 +50,7 @@ public class BookingMap {
                 bookings.remove(id);
                 //get the current number of bookings
                 int numOfBookings = countBookings(b.getMemberName());
-                result= "Cancelled. " + b.getMemberName() + "currently has "+numOfBookings + " booking"+b.serverMsg()+"\n-;";
+                result = "Cancelled. " + b.getMemberName() + "currently has "+numOfBookings + " booking"+b.serverMsg()+"\n-;";
             }
         }
         return result;
