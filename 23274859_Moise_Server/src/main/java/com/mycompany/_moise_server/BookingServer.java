@@ -4,7 +4,9 @@
  */
 package com.mycompany._moise_server;
 
+import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  *
@@ -43,7 +45,7 @@ public class BookingServer {
         do{
             run();
         }while(true);
-        
+    }
         //accept a client connection and start a thread
         private static void run(){
             //declare a socket for communication with a client
@@ -54,7 +56,7 @@ public class BookingServer {
                 // this method blocks until an incoming connection is received
                 //one connected, accept() returns a socket
                 // Once connected, accept() returns a Socket for communicating with that client.
-                link =servSock.accept();
+                link = servSock.accept();
                 
                 //handler to communicate with the client
                 
@@ -67,7 +69,19 @@ public class BookingServer {
                 t.start();
             }catch(IOException e1){
                 //handle error while accepting connection
-                
+                    e1.printStackTrace();
+                    //close the client socket if one was successfully assigned
+                    try{
+                        if(link!=null){
+                            link.close();
+                        }
+                    }catch(IOException e2){
+                        //error if socket cannot be closed
+                        System.out.println("Unable to disconnect!");
+
+                        //terminate if failed
+                        System.exit(1);
+                    }
             }
         }
     }
