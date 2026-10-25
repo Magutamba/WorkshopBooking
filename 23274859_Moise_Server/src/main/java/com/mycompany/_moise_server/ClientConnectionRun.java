@@ -18,13 +18,10 @@ import java.net.Socket;
 public class ClientConnectionRun implements Runnable {
     //Socket used to connect with client
     Socket client_link=null;
-    //variable to identify client
-    String clientId;
     
     //receive client socket and identifier
-    public ClientConnectionRun(Socket connection, String cId ){
+    public ClientConnectionRun(Socket connection ){
         this.client_link = connection;
-        this.clientId= cId;
     }
     
     //
