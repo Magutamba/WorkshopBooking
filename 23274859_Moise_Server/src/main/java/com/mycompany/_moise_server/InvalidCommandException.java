@@ -8,6 +8,10 @@ package com.mycompany._moise_server;
  *
  * @author moise
  */
-public class InvalidCommandException {
+ //invalid command custom class to handle malfourmed data and invalid commands
+public class InvalidCommandException extends Exception {
     
+    public InvalidCommandException(String error){
+        super(error);
+    }
 }
