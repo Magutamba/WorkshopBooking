@@ -13,6 +13,7 @@ public class InvalidCommandException extends Exception {
 
     public InvalidCommandException(String error){
          //pass the error message to exception
+         //exception stores it internally and getMessage() retrieves it
         super(error);
     }
 }
