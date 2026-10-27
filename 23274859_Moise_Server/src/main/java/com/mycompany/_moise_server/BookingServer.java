@@ -53,7 +53,7 @@ public class BookingServer {
         //accept a client connection and start a thread
         private static void run(){
             //declare a socket for communication with a client
-            Socket link;
+            Socket link = null;
             
             try{
                 //wait for a client to connect
@@ -73,14 +73,16 @@ public class BookingServer {
             }catch(IOException e1){
                 //handle error while accepting connection
                 e1.printStackTrace();
-                try{
-                    //close the client socket if one was successfully assigned
-                    link.close();
-                }catch(IOException e2){
-                    //error if socket cannot be closed
-                    System.out.println("Unable to disconnect!");
-                    //terminate if failed
-                    System.exit(1);
+                if(link!=null){
+                    try{
+                        //close the client socket if one was successfully assigned
+                        link.close();
+                    }catch(IOException e2){
+                        //error if socket cannot be closed
+                        System.out.println("Unable to disconnect!");
+                        //terminate if failed
+                        System.exit(1);
+                    }
                 }
             }
         }
