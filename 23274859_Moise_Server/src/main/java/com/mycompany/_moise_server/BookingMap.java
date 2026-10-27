@@ -39,6 +39,8 @@ public class BookingMap {
     //synchronize ensure one thread executes it at a time, prevent simultaneous use that results in conflict
     public synchronized String cancel(Booking b) {
         String result = "";
+        //variable for key of booking to remove
+        Long cancelledBooking = null;
         //iterate through map
         for (Map.Entry<Long, Booking> entry : bookings.entrySet()) {
             long id = entry.getKey();
@@ -49,13 +51,17 @@ public class BookingMap {
                            &&  value.getDate().equalsIgnoreCase(b.getDate())
                            && value.getTime().equalsIgnoreCase(b.getTime()) )
             {
-                //remove the booking
-                bookings.remove(id);
-                //get the current number of bookings
-                int numOfBookings = countBookings(b.getMemberName());
-                result = "Cancelled. " + b.getMemberName() + "currently has "+numOfBookings + " booking"+b.serverMsg()+"\n-;";
+                cancelledBooking=entry.getKey();
+                break;
             }
         }
+                if(cancelledBooking!=null){
+                    //remove the booking
+                    bookings.remove(cancelledBooking);
+                    //get the current number of bookings
+                    int numOfBookings = countBookings(b.getMemberName());
+                    result = "Cancelled. " + b.getMemberName() + "currently has "+numOfBookings + " booking"+b.serverMsg()+"\n-;";
+                }
         return result;
     }
     
