@@ -24,10 +24,6 @@ public class ClientConnectionRun implements Runnable {
         this.client_link = connection;
     }
     
-    //
-    public BookingMap(BookingMap bookings){
-        this.bookings = bookings;
-    }
     //run method as code that the threads run
     public void run(){
         try{
@@ -41,8 +37,8 @@ public class ClientConnectionRun implements Runnable {
             //read one line of text sent by client
             String clientMessage = in.readLine();
             try{
-                //continue receiving commands from client
-                while(){
+                //continue receiving commands from client, when terminated in return null
+                while((clientMessage = in.readLine())!=null){
                     //trim to remove white space
                     if(clientMessage.trim().isEmpty()){
                       //if client send an empty booking
@@ -97,16 +93,36 @@ public class ClientConnectionRun implements Runnable {
                         String validDate = validDate(date);
                         //validate time
                         String validTime =validTime(time);
+                        
+                        //initialize a new Booking object with the variables after validation
+                        Booking booking = new Booking(name,workshopName,validDate,validTime);
+                        //initialize a new BookingMap object
+                        BookingMap bookingMap = new BookingMap();
+                        if(action.equalsIgnoreCase("book")){
+                            //use exists method to check for already existing bookings
+                            if(bookingMap.exists(booking)){
+                                throw new InvalidCommandException("This booking already exists.");
+                            }else{
+                                bookingMap.book(booking);
+                            }
+                        }else if(action.equalsIgnoreCase("cancel")){
+                            //cancel booking if it exists
+                            if(!bookingMap.exists(booking)){
+                                throw new InvalidCommandException("This booking doesn't exists.");
+                            }else{
+                                bookingMap.cancel(booking);
+                            }
+                        }else if(action.equalsIgnoreCase("list")){
+                            bookingMap.list(name);
+                        }
+                            
 
                     }
-                    if(action.equalsIgnoreCase("book")){
 
-                    }
-
-                }catch(InvalidCommandException e){
-                       //print the error messages
-                       out.println("InvalidCommandException: "+e.getMessage()); 
-                }
+            }catch(InvalidCommandException e){
+                //print the error messages
+                out.println("InvalidCommandException: "+e.getMessage()); 
+            }
             }
             //display the receive client message in server console
             System.out.println();
