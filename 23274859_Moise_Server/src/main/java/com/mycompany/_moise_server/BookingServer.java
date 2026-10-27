@@ -23,6 +23,9 @@ public class BookingServer {
     //counts the number of clients accepted by the server
     private static int clientConnections = 0;
     
+    //share BookingMap used by all clients
+    private static final BookingMap bookingMap=new BookingMap();
+    
     public static void main(String[] args){
         
         System.out.println("Opening port...\n");
@@ -45,6 +48,7 @@ public class BookingServer {
         do{
             run();
         }while(true);
+        
     }
         //accept a client connection and start a thread
         private static void run(){
@@ -58,9 +62,8 @@ public class BookingServer {
                 // Once connected, accept() returns a Socket for communicating with that client.
                 link = servSock.accept();
                 
-                //handler to communicate with the client
-                
-                Runnable resource = new ClientConnectionRun(link);
+                //handler to communicate with the client, with shared link and bookingMao
+                Runnable resource = new ClientConnectionRun(link, bookingMap);
                 
                 //seperate thread for the client handler
                 Thread t = new Thread(resource);
@@ -69,22 +72,16 @@ public class BookingServer {
                 t.start();
             }catch(IOException e1){
                 //handle error while accepting connection
-                    e1.printStackTrace();
+                e1.printStackTrace();
+                try{
                     //close the client socket if one was successfully assigned
-                    try{
-                        if(link!=null){
-                            link.close();
-                        }
-                    }catch(IOException e2){
-                        //error if socket cannot be closed
-                        System.out.println("Unable to disconnect!");
-
-                        //terminate if failed
-                        System.exit(1);
-                    }
+                    link.close();
+                }catch(IOException e2){
+                    //error if socket cannot be closed
+                    System.out.println("Unable to disconnect!");
+                    //terminate if failed
+                    System.exit(1);
+                }
             }
         }
-    }
-    
-    
 }

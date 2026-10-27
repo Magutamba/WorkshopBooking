@@ -114,7 +114,7 @@ public class ClientConnectionRun implements Runnable {
             if(action.equals("list")){
                 //if client as bookings
                 if(bookingMap.countBookings(name)!=0){
-                    bookingMap.list(name);
+                    return bookingMap.list(name);
                 }
             }
 
