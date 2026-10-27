@@ -73,6 +73,7 @@ public class BookingServer {
             }catch(IOException e1){
                 //handle error while accepting connection
                 e1.printStackTrace();
+                
                 if(link!=null){
                     try{
                         //close the client socket if one was successfully assigned

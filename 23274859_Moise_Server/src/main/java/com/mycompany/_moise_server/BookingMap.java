@@ -23,19 +23,21 @@ public class BookingMap {
     }
 
     //add a new booking
-    //synchronize
-    public String book(Booking b) {
+    //synchronize ensure one thread executes it at a time, prevent simultaneous use that results in conflict
+    public synchronized String book(Booking b) {
         id++;
         //add the new booking to the linkedHashMap
         bookings.put(id, b);
         //get number of bookings
         int numOfBookings = countBookings(b.getMemberName());
-        return b.getMemberName() + "currently has" +numOfBookings+"bookings:" + b.serverMsg() + "\n-;";
+        //return b.getMemberName() + "currently has" +numOfBookings+"bookings:" + b.serverMsg() + "\n-;";
+        return list(b.getMemberName());
 
     }
 
     //remove a booking
-    public String cancel(Booking b) {
+    //synchronize ensure one thread executes it at a time, prevent simultaneous use that results in conflict
+    public synchronized String cancel(Booking b) {
         String result = "";
         //iterate through map
         for (Map.Entry<Long, Booking> entry : bookings.entrySet()) {
@@ -58,7 +60,8 @@ public class BookingMap {
     }
     
     //list all the person's booking
-    public String list(String memberName) {
+    //synchronize ensure one thread executes it at a time, prevent simultaneous use that results in conflict
+    public synchronized String list(String memberName) {
         //get the number of bookings
         int numOfBookings = countBookings(memberName);
         
@@ -66,7 +69,7 @@ public class BookingMap {
          StringBuffer result = new StringBuffer();
          
          result.append(memberName);
-         result.append(" currently as ");
+         result.append(" currently has ");
          //if  numOfBookings is 1 singular booking otherwise bookings
          result.append(numOfBookings==1 ? " booking: " : " bookings: ");
          
@@ -84,7 +87,7 @@ public class BookingMap {
             if (value.getMemberName().equalsIgnoreCase(memberName)) {
                 //after the first booking
                 if(!first){
-                    result.append(" -; ");
+                    result.append("-; ");
                 }
                 result.append(value.serverMsg());
                 //set to false so next bookings have semicolon
@@ -95,7 +98,8 @@ public class BookingMap {
     }
 
     //count number of bookings
-    public int countBookings(String name) {
+    //synchronize ensure one thread executes it at a time, prevent simultaneous use that results in conflict
+    public synchronized int countBookings(String name) {
         int count = 0;
         
         for (Map.Entry<Long, Booking> entry : bookings.entrySet()) {
@@ -109,7 +113,8 @@ public class BookingMap {
     }
     
     //method for existing booking
-    public boolean exists(Booking b){
+    //synchronize ensure one thread executes it at a time, prevent simultaneous use that results in conflict
+    public synchronized boolean exists(Booking b){
         boolean exist=false;
          //iterate through map
         for (Map.Entry<Long, Booking> entry : bookings.entrySet()){
