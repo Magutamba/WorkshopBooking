@@ -152,11 +152,12 @@ public class ClientConnectionRun implements Runnable {
                     }
                 case "cancel" :
                     //cancel booking if it exists
-                    if (!bookingMap.exists(booking)) {
+                    /*if (!bookingMap.exists(booking)) {
                         throw new InvalidCommandException("This booking doesn't exists.");
                     } else {
                        return bookingMap.cancel(booking);
-                    }
+                    }*/
+                    return bookingMap.cancel(booking);
                 default:
                     //satisfies compiler
                     throw new InvalidCommandException("Invalid action");

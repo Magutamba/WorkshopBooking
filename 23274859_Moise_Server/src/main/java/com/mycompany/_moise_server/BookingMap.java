@@ -15,7 +15,7 @@ import java.util.Map;
 public class BookingMap {
 
     //linked hash map for sorted collection
-    HashMap<Long, Booking> bookings;
+    LinkedHashMap<Long, Booking> bookings;
     private static long id = 2000;
 
     public BookingMap() {
@@ -37,7 +37,7 @@ public class BookingMap {
 
     //remove a booking
     //synchronize ensure one thread executes it at a time, prevent simultaneous use that results in conflict
-    public synchronized String cancel(Booking b) {
+    public synchronized String cancel(Booking b) throws InvalidCommandException {
         String result = "";
         //variable for key of booking to remove
         Long cancelledBooking = null;
@@ -61,6 +61,8 @@ public class BookingMap {
                     //get the current number of bookings
                     int numOfBookings = countBookings(b.getMemberName());
                     result = "Cancelled. " + b.getMemberName() + "currently has "+numOfBookings + " booking"+b.serverMsg()+"\n-;";
+                }else if(cancelledBooking==null){
+                    throw new InvalidCommandException("Booking does not exist");
                 }
         return result;
     }
