@@ -38,14 +38,15 @@ public class ClientConnectionRun implements Runnable {
             //printwriter sends message back to client,getOutputStream() sends data through the socket
             PrintWriter out = new PrintWriter(client_link.getOutputStream(), true);
 
-            //read one line of text sent by client
-            String clientMessage = in.readLine();
+            //client message
+            String clientMessage;
             
                 //continue receiving commands from client, when terminated in return null
                 while ((clientMessage = in.readLine()) != null) {
                     //terminate if client sends stop
                     if (clientMessage.equalsIgnoreCase("Stop")) {
                             System.out.println("TERMINATE");
+                            break;
                     }
                     try {
                     //trim to remove white space
@@ -85,7 +86,7 @@ public class ClientConnectionRun implements Runnable {
     
     //this method may report InvalidCommandException, run method will catch the exception
     //method handles validation and the action
-    private static String processAction(String clientMessage)throws InvalidCommandException{
+    private String processAction(String clientMessage)throws InvalidCommandException{
             //-1 ensures trailing empty string is preserved
             String[] parts = clientMessage.trim().split(";", -1);
 
@@ -133,15 +134,13 @@ public class ClientConnectionRun implements Runnable {
 
             //initialize a new Booking object with the variables after validation
             Booking booking = new Booking(name, workshopName, validDate, validTime);
-            //initialize a new BookingMap object
-            BookingMap bookingMap = new BookingMap();
             switch(action){
                 case "book":
                     //use exists method to check for already existing bookings
                     if (bookingMap.exists(booking)) {
                         throw new InvalidCommandException("This booking already exists.");
                     } else {
-                        bookingMap.book(booking);
+                        return bookingMap.book(booking);
                     }
                 case "cancel" :
                     //cancel booking if it exists
