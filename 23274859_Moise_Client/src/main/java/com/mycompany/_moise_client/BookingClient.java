@@ -40,7 +40,7 @@ public class BookingClient {
                 PrintWriter out = new PrintWriter(new socket.getOutputStream(),true);
 
                 //dialog box to store user booking
-                String userBooking = JOptionPane.showInputDialog("Enter your  booking in e.g(action; name; workshop name; date, time am/pm)");
+                String userBooking = JOptionPane.showInputDialog("Enter your  booking in e.g(action; name; workshop name; date, time  3 am/pm)");
 
                 // Sends the user's booking to the server as one text line.
                 out.println(userBooking);
