@@ -39,11 +39,13 @@ public class BookingClient {
                 //PrintWriter for sending text to the server; true enables automatic flushing after println().
                 PrintWriter out = new PrintWriter(new socket.getOutputStream(),true);
 
-                //dialog box to store user booking
-                String userBooking = JOptionPane.showInputDialog("Enter your  booking in e.g(action; name; workshop name; date, time  3 am/pm)");
+                //dialog box to store user message
+                String userMessage = JOptionPane.showInputDialog(
+                        "Enter your  booking in e.g(action; name; workshop name; date, time  3 am/pm), enter Stop to terminate"
+                );
 
-                // Sends the user's booking to the server as one text line.
-                out.println(userBooking);
+                // Sends the user's message to the server as one text line.
+                out.println(userMessage);
 
                 // Waits for and reads one complete response line from the server.
                 String serverReply = in.readLine();
