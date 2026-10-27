@@ -47,8 +47,13 @@ public class ClientConnectionRun implements Runnable {
                   throw new InvalidCommandException("Cannot send empty booking.");
                 }else{
                     String[] parts = clientBooking.trim().split(";");
+                    
+                    //invalid
+                    if(parts.length!=5){
+                        throw new
+                    }
                     if(!parts[0].equalsIgnoreCase("book") || !parts[0].equalsIgnoreCase("cancel") || !parts[0].equalsIgnoreCase("list")){
-                        throw new InvalidCommandException("Not a valid command e.g(book, cancel, list)");
+                        throw new InvalidCommandException("Not a valid action e.g(book, cancel, list)");
                     }
                     for(int i=0; i<parts.length; i++){
                         if(parts[0].equalsIgnoreCase("book"))
