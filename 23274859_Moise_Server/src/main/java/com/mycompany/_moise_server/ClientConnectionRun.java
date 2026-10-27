@@ -50,7 +50,7 @@ public class ClientConnectionRun implements Runnable {
                         //if client send an empty booking
                         throw new InvalidCommandException("Cannot send empty booking.");
                     } else {
-                        String response = commandProcess(clientMessage);
+                        String response = processAction(clientMessage);
                         out.println(response);
 
                     }
@@ -79,10 +79,10 @@ public class ClientConnectionRun implements Runnable {
             }
         }
     }
-
-    private static String commandProcess(String clientMessage) {
-        //this method may report InvalidCommandException, run method will catch the exception
-        throw InvalidCommandException{
+    
+    //this method may report InvalidCommandException, run method will catch the exception
+    //method handles validation and the action
+    private static String processAction(String clientMessage)throws InvalidCommandException{
             //-1 ensures trailing empty string is preserved
             String[] parts = clientMessage.trim().split(";", -1);
 
@@ -124,9 +124,9 @@ public class ClientConnectionRun implements Runnable {
             }
 
             //validate date is valid
-            String validDate = validDate(date);
+            String validDate = validateDate(date);
             //validate time
-            String validTime = validTime(time);
+            String validTime = validateTime(time);
 
             //initialize a new Booking object with the variables after validation
             Booking booking = new Booking(name, workshopName, validDate, validTime);
@@ -150,7 +150,7 @@ public class ClientConnectionRun implements Runnable {
                 case "list":
                         return bookingMap.list(name);
             }
-        }
+        
     }
 
 }

@@ -53,12 +53,12 @@ public class Booking {
     public String getTime() {
         return time;
     }
-    public String ValidDate(String date) {
+    public String validateDate(String date) {
         //assign user entered booking date as a String to bookingDate
         String bookingDateIn = date;
 
         //defines expected pattern of date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM uuuu");
 
         try {
 
@@ -69,11 +69,11 @@ public class Booking {
             return bookingDate.format(formatter);
 
         } catch (DateTimeParseException e) {
-            throw new  InvalidCommandException("Invalid Date format e.g(18 November 2026)");
+            throw new InvalidCommandException("Invalid Date format e.g(18 November 2026)");
 
         }
     }
-     public String validTime(String time){
+     public String validateTime(String time){
          //assign user entered booking time as a String to bookingTime
          String bookingTimeIn = time;
          //defines expected pattern of time
