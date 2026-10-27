@@ -4,6 +4,10 @@
  */
 package com.mycompany._moise_server;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 /**
  *
  * @author moise
@@ -49,12 +53,49 @@ public class Booking {
     public String getTime() {
         return time;
     }
+    public String ValidDate(String date) {
+        //assign user entered booking date as a String to bookingDate
+        String bookingDateIn = date;
+
+        //defines expected pattern of date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
+
+        try {
+
+            //converts bookingDate to LocalDate and check if it matches pattern in formatter
+            LocalDate bookingDate = LocalDate.parse(bookingDateIn, formatter);
+            
+            //return the date as a string
+            return bookingDate.format(formatter);
+
+        } catch (DateTimeParseException e) {
+            throw new  InvalidCommandException("Invalid Date format e.g(18 November 2026)");
+
+        }
+    }
+     public String validTime(String time){
+         //assign user entered booking time as a String to bookingTime
+         String bookingTimeIn = time;
+         //defines expected pattern of time
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+        
+        try{
+            //converts bookingDate to LocalDate and check if it matches pattern in formatter
+            LocalDate bookingTime = LocalDate.parse(bookingTimeIn, timeFormatter);
+            
+            //return the date as a string
+            return bookingTime.format(timeFormatter);
+        }catch(DateTimeParseException e){
+            throw new  InvalidCommandException("Invalid Time format e.g(2:00 pm, 2 am");
+        }
+     }
+     
     
 //    public String toString(){
 //        return "book;"+memberName+";"+workshopName+";"+date+";"+time;
 //    }
     public String serverMsg(){
-        return workshopName+" on"+date+" at "+time;
+        return workshopName+" on "+date+" at "+time;
     }
     
     public String saveFormat(){
