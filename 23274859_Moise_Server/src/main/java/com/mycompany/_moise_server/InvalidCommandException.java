@@ -10,8 +10,9 @@ package com.mycompany._moise_server;
  */
  //invalid command custom class to handle malfourmed data and invalid commands
 public class InvalidCommandException extends Exception {
-    
+
     public InvalidCommandException(String error){
+         //pass the error message to exception
         super(error);
     }
 }
