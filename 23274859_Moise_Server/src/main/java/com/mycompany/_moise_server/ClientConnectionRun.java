@@ -109,6 +109,14 @@ public class ClientConnectionRun implements Runnable {
             if (name.isEmpty()) {
                 throw new InvalidCommandException("Name must be provided");
             }
+            
+            //handle list action, handle earlier since it only needs name
+            if(action.equals("list")){
+                //if client as bookings
+                if(bookingMap.countBookings(name)!=0){
+                    bookingMap.list(name);
+                }
+            }
 
             if (workshopName.isEmpty()) {
                 throw new InvalidCommandException("Work shop name as to be provided");
@@ -149,10 +157,10 @@ public class ClientConnectionRun implements Runnable {
                     } else {
                        return bookingMap.cancel(booking);
                     }
-                case "list":
-                        return bookingMap.list(name);
+                default:
+                    //satisfies compiler
+                    throw new InvalidCommandException("Invalid action");
             }
-        
     }
 
 }
