@@ -81,74 +81,76 @@ public class ClientConnectionRun implements Runnable {
     }
 
     private static String commandProcess(String clientMessage) {
-        
-        //-1 ensures trailing empty string is preserved
-        String[] parts = clientMessage.trim().split(";", -1);
+        //this method may report InvalidCommandException, run method will catch the exception
+        throw InvalidCommandException{
+            //-1 ensures trailing empty string is preserved
+            String[] parts = clientMessage.trim().split(";", -1);
 
-        //invalid number of fields
-        if (parts.length != 5) {
-            throw new InvalidCommandException("Must provide valid details for all fields (action; name; workshop name; date, time am/pm)");
-        }
-        //invalid action
-        String action = parts[0].trim();
-        String name = parts[1].trim();
-        String workshopName = parts[2].trim();
-        String date = parts[3].trim();
-        String time = parts[4].trim();
-
-        //empty values check
-        if (action.isEmpty()) {
-            throw new InvalidCommandException("Action must be provided");
-        }
-
-        if (name.isEmpty()) {
-            throw new InvalidCommandException("Name must be provided");
-        }
-
-        if (workshopName.isEmpty()) {
-            throw new InvalidCommandException("Work shop name as to be provided");
-        }
-
-        if (date.isEmpty()) {
-            throw new InvalidCommandException("Date as to be provided");
-        }
-
-        if (time.isEmpty()) {
-            throw new InvalidCommandException("Time as to be provided");
-        }
-
-        //invalid action
-        if (!action.equalsIgnoreCase("book") && !action.equalsIgnoreCase("cancel") && !action.equalsIgnoreCase("list")) {
-            throw new InvalidCommandException("Not a valid action e.g(book, cancel, list)");
-        }
-
-        //validate date is valid
-        String validDate = validDate(date);
-        //validate time
-        String validTime = validTime(time);
-
-        //initialize a new Booking object with the variables after validation
-        Booking booking = new Booking(name, workshopName, validDate, validTime);
-        //initialize a new BookingMap object
-        BookingMap bookingMap = new BookingMap();
-        if (action.equalsIgnoreCase("book")) {
-            //use exists method to check for already existing bookings
-            if (bookingMap.exists(booking)) {
-                throw new InvalidCommandException("This booking already exists.");
-            } else {
-                bookingMap.book(booking);
+            //invalid number of fields
+            if (parts.length != 5) {
+                throw new InvalidCommandException("Must provide valid details for all fields (action; name; workshop name; date, time am/pm)");
             }
-        } else if (action.equalsIgnoreCase("cancel")) {
-            //cancel booking if it exists
-            if (!bookingMap.exists(booking)) {
-                throw new InvalidCommandException("This booking doesn't exists.");
-            } else {
-                bookingMap.cancel(booking);
-            }
-        } else if (action.equalsIgnoreCase("list")) {
-            bookingMap.list(name);
-        }
+            //invalid action
+            String action = parts[0].trim().toLowerCase();
+            String name = parts[1].trim();
+            String workshopName = parts[2].trim();
+            String date = parts[3].trim();
+            String time = parts[4].trim();
 
+            //empty values check
+            if (action.isEmpty()) {
+                throw new InvalidCommandException("Action must be provided");
+            }
+
+            if (name.isEmpty()) {
+                throw new InvalidCommandException("Name must be provided");
+            }
+
+            if (workshopName.isEmpty()) {
+                throw new InvalidCommandException("Work shop name as to be provided");
+            }
+
+            if (date.isEmpty()) {
+                throw new InvalidCommandException("Date as to be provided");
+            }
+
+            if (time.isEmpty()) {
+                throw new InvalidCommandException("Time as to be provided");
+            }
+
+            //invalid action
+            if (!action.equalsIgnoreCase("book") && !action.equalsIgnoreCase("cancel") && !action.equalsIgnoreCase("list")) {
+                throw new InvalidCommandException("Not a valid action e.g(book, cancel, list)");
+            }
+
+            //validate date is valid
+            String validDate = validDate(date);
+            //validate time
+            String validTime = validTime(time);
+
+            //initialize a new Booking object with the variables after validation
+            Booking booking = new Booking(name, workshopName, validDate, validTime);
+            //initialize a new BookingMap object
+            BookingMap bookingMap = new BookingMap();
+            switch(action){
+                case "book":
+                    //use exists method to check for already existing bookings
+                    if (bookingMap.exists(booking)) {
+                        throw new InvalidCommandException("This booking already exists.");
+                    } else {
+                        bookingMap.book(booking);
+                    }
+                case "cancel" :
+                    //cancel booking if it exists
+                    if (!bookingMap.exists(booking)) {
+                        throw new InvalidCommandException("This booking doesn't exists.");
+                    } else {
+                       return bookingMap.cancel(booking);
+                    }
+                case "list":
+                        return bookingMap.list(name);
+            }
+        }
     }
 
 }
