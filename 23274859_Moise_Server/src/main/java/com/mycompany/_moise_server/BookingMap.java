@@ -23,6 +23,7 @@ public class BookingMap {
     }
 
     //add a new booking
+    //synchronize
     public String book(Booking b) {
         id++;
         //add the new booking to the linkedHashMap
@@ -105,5 +106,26 @@ public class BookingMap {
         }
         //return number of bookings
         return count;
+    }
+    
+    //method for existing booking
+    public boolean exists(Booking b){
+        boolean exist=false;
+         //iterate through map
+        for (Map.Entry<Long, Booking> entry : bookings.entrySet()){
+            //get  the booking values
+            Booking value = entry.getValue();
+            //check if the booking exists
+            if (value.getMemberName().equalsIgnoreCase(b.getMemberName()) 
+                    && value.getWorkshopName().equalsIgnoreCase(b.getWorkshopName()) 
+                           &&  value.getDate().equalsIgnoreCase(b.getDate())
+                           && value.getTime().equalsIgnoreCase(b.getTime()) )
+            {
+                //return true if a booking already exists
+                return true;
+            }
+        }
+        //return if booking doesn't exist
+        return false;
     }
 }
