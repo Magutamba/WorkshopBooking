@@ -19,10 +19,13 @@ public class ClientConnectionRun implements Runnable {
 
     //Socket used to connect with client
     Socket client_link = null;
+    //declare BookingMap to keep it as shared field rather than create a new one every time
+    private final BookingMap bookingMap;
 
     //receive client socket and identifier
-    public ClientConnectionRun(Socket connection) {
+    public ClientConnectionRun(Socket connection,BookingMap bookingMap) {
         this.client_link = connection;
+        this.bookingMap = bookingMap;
     }
 
     //run method as code that the threads run
@@ -125,7 +128,7 @@ public class ClientConnectionRun implements Runnable {
 
             //validate date is valid
             String validDate = Booking.validateDate(date);
-            //validate time
+            //validate time 
             String validTime = Booking.validateTime(time);
 
             //initialize a new Booking object with the variables after validation
