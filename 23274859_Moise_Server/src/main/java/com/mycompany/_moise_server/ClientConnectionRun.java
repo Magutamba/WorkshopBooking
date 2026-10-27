@@ -41,68 +41,72 @@ public class ClientConnectionRun implements Runnable {
             //read one line of text sent by client
             String clientMessage = in.readLine();
             try{
-                //trim to remove white space
-                if(clientMessage.trim().isEmpty()){
-                  //if client send an empty booking
-                  throw new InvalidCommandException("Cannot send empty booking.");
-                  
-                //terminate if client sends stop
-                if(clientMessage.equalsIgnoreCase("Stop")){
-                    out.println("TERMINATE");
+                //continue receiving commands from client
+                while(){
+                    //trim to remove white space
+                    if(clientMessage.trim().isEmpty()){
+                      //if client send an empty booking
+                      throw new InvalidCommandException("Cannot send empty booking.");
+
+                    //terminate if client sends stop
+                    if(clientMessage.equalsIgnoreCase("Stop")){
+                        out.println("TERMINATE");
+                    }
+                    }else{
+                        //-1 ensures trailing empty string is preserved
+                        String[] parts = clientMessage.trim().split(";",-1);
+
+                        //invalid number of fields
+                        if(parts.length!=5){
+                            throw new InvalidCommandException("Must provide valid details for all fields (action; name; workshop name; date, time am/pm)");
+                        }
+                        //invalid action
+                        String action = parts[0].trim();
+                        String name = parts[1].trim();
+                        String workshopName = parts[2].trim();
+                        String date = parts[3].trim();
+                        String time = parts[4].trim();
+
+                        //empty values check
+                        if(action.isEmpty()){
+                            throw new InvalidCommandException("Action must be provided");
+                        }
+
+                        if(name.isEmpty()){
+                            throw new InvalidCommandException("Name must be provided");
+                        }
+
+                        if(workshopName.isEmpty()){
+                            throw new InvalidCommandException("Work shop name as to be provided");
+                        }
+
+                        if(date.isEmpty()){
+                            throw new InvalidCommandException("Date as to be provided");
+                        }
+
+                        if(time.isEmpty()){
+                            throw new InvalidCommandException("Time as to be provided");
+                        }
+
+                         //invalid action
+                        if(!action.equalsIgnoreCase("book") && !action.equalsIgnoreCase("cancel") && !action.equalsIgnoreCase("list")){
+                            throw new InvalidCommandException("Not a valid action e.g(book, cancel, list)");
+                        }
+
+                        //validate date is valid
+                        String validDate = validDate(date);
+                        //validate time
+                        String validTime =validTime(time);
+
+                    }
+                    if(action.equalsIgnoreCase("book")){
+
+                    }
+
+                }catch(InvalidCommandException e){
+                       //print the error messages
+                       out.println("InvalidCommandException: "+e.getMessage()); 
                 }
-                }else{
-                    //-1 ensures trailing empty string is preserved
-                    String[] parts = clientMessage.trim().split(";",-1);
-                    
-                    //invalid number of fields
-                    if(parts.length!=5){
-                        throw new InvalidCommandException("Must provide valid details for all fields (action; name; workshop name; date, time am/pm)");
-                    }
-                    //invalid action
-                    String action = parts[0].trim();
-                    String name = parts[1].trim();
-                    String workshopName = parts[2].trim();
-                    String date = parts[3].trim();
-                    String time = parts[4].trim();
-                    
-                    //empty values check
-                    if(action.isEmpty()){
-                        throw new InvalidCommandException("Action must be provided");
-                    }
-                    
-                    if(name.isEmpty()){
-                        throw new InvalidCommandException("Name must be provided");
-                    }
-                    
-                    if(workshopName.isEmpty()){
-                        throw new InvalidCommandException("Work shop name as to be provided");
-                    }
-                    
-                    if(date.isEmpty()){
-                        throw new InvalidCommandException("Date as to be provided");
-                    }
-                    
-                    if(time.isEmpty()){
-                        throw new InvalidCommandException("Time as to be provided");
-                    }
-                    
-                     //invalid action
-                    if(!action.equalsIgnoreCase("book") && !action.equalsIgnoreCase("cancel") && !action.equalsIgnoreCase("list")){
-                        throw new InvalidCommandException("Not a valid action e.g(book, cancel, list)");
-                    }
-                    
-                    //validate date is valid
-                    String validDate = validDate(date);
-                    //validate time
-                    String validTime =validTime(time);
-                    
-                }
-                if(action.equalsIgnoreCase("book")){
-                    
-                }
-                
-            }catch(InvalidCommandException e){
-                
             }
             //display the receive client message in server console
             System.out.println();
