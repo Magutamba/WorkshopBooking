@@ -39,15 +39,20 @@ public class ClientConnectionRun implements Runnable {
             PrintWriter out = new PrintWriter(client_link.getOutputStream(), true);
             
             //read one line of text sent by client
-            String clientBooking = in.readLine();
+            String clientMessage = in.readLine();
             try{
                 //trim to remove white space
-                if(clientBooking.trim().isEmpty()){
+                if(clientMessage.trim().isEmpty()){
                   //if client send an empty booking
                   throw new InvalidCommandException("Cannot send empty booking.");
+                  
+                //terminate if client sends stop
+                if(clientMessage.equalsIgnoreCase("Stop")){
+                    out.println("TERMINATE");
+                }
                 }else{
                     //-1 ensures trailing empty string is preserved
-                    String[] parts = clientBooking.trim().split(";",-1);
+                    String[] parts = clientMessage.trim().split(";",-1);
                     
                     //invalid number of fields
                     if(parts.length!=5){
@@ -90,6 +95,9 @@ public class ClientConnectionRun implements Runnable {
                     String validDate = validDate(date);
                     //validate time
                     String validTime =validTime(time);
+                    
+                }
+                if(action.equalsIgnoreCase("book")){
                     
                 }
                 
