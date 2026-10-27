@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,8 +21,10 @@ public class BookingClient {
         String host = "localhost";
         // Stores the server TCP port; it must match the port used by EchoServer.
         int port = 1234;
+        run();
+    }
         //connect to server and start a thread
-        private static void run(){
+        private static run(){
             // Starts a try block so networking and input/output errors can be handled safely.
             try{
                 // Creates a TCP socket and immediately attempts to connect to the server identified by host and port.
@@ -31,16 +34,16 @@ public class BookingClient {
                 System.out.println("Connected to server.");
 
                 //BufferedReader for efficiently reading text sent by the server.
-                BufferedReader in = new BifferedReader(new InputStreamReader(socket.getInputStream()));
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
                 //PrintWriter for sending text to the server; true enables automatic flushing after println().
                 PrintWriter out = new PrintWriter(new socket.getOutputStream(),true);
 
                 //dialog box to store user booking
-                String userBooking = JOPtionPane.showInputDialog("Enter your  booking in e.g(command,)");
+                String userBooking = JOptionPane.showInputDialog("Enter your  booking in e.g(action; name; workshop name; date, time am/pm)");
 
                 // Sends the user's booking to the server as one text line.
-                writer.println(userBooking);
+                out.println(userBooking);
 
                 // Waits for and reads one complete response line from the server.
                 String serverReply = in.readLine();
@@ -65,6 +68,4 @@ public class BookingClient {
                 }
             }
         }
-
-    }
 }
