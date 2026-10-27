@@ -53,7 +53,8 @@ public class Booking {
     public String getTime() {
         return time;
     }
-    public String validateDate(String date) {
+    //this method may report InvalidCommandException, run method will catch the exception
+    public static String validateDate(String date) throws InvalidCommandException {
         //assign user entered booking date as a String to bookingDate
         String bookingDateIn = date;
 
@@ -73,7 +74,8 @@ public class Booking {
 
         }
     }
-     public String validateTime(String time){
+    //this method may report InvalidCommandException, run method will catch the exception
+     public static String validateTime(String time) throws InvalidCommandException{
          //assign user entered booking time as a String to bookingTime
          String bookingTimeIn = time;
          //defines expected pattern of time

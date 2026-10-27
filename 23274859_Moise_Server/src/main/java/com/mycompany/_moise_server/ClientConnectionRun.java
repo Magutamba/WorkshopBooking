@@ -124,9 +124,9 @@ public class ClientConnectionRun implements Runnable {
             }
 
             //validate date is valid
-            String validDate = validateDate(date);
+            String validDate = Booking.validateDate(date);
             //validate time
-            String validTime = validateTime(time);
+            String validTime = BoovalidateTime(time);
 
             //initialize a new Booking object with the variables after validation
             Booking booking = new Booking(name, workshopName, validDate, validTime);
