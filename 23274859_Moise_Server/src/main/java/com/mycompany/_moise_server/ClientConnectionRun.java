@@ -60,15 +60,39 @@ public class ClientConnectionRun implements Runnable {
                     String date = parts[3].trim();
                     String time = parts[4].trim();
                     
+                    //empty values check
+                    if(action.isEmpty()){
+                        throw new InvalidCommandException("Action must be provided");
+                    }
+                    
+                    if(name.isEmpty()){
+                        throw new InvalidCommandException("Name must be provided");
+                    }
+                    
+                    if(workshopName.isEmpty()){
+                        throw new InvalidCommandException("Work shop name as to be provided");
+                    }
+                    
+                    if(date.isEmpty()){
+                        throw new InvalidCommandException("Date as to be provided");
+                    }
+                    
+                    if(time.isEmpty()){
+                        throw new InvalidCommandException("Time as to be provided");
+                    }
+                    
                      //invalid action
-                    if(!action.equalsIgnoreCase("book") || !action.equalsIgnoreCase("cancel") || !action.equalsIgnoreCase("list")){
+                    if(!action.equalsIgnoreCase("book") && !action.equalsIgnoreCase("cancel") && !action.equalsIgnoreCase("list")){
                         throw new InvalidCommandException("Not a valid action e.g(book, cancel, list)");
                     }
-                    if(parts[0].equalsIgnoreCase("book"))
-                    for(int i=0; i<parts.length; i++){
-                        
-                    }
+                    
+                    //validate date is valid
+                    String validDate = validDate(date);
+                    //validate time
+                    String validTime =validTime(time);
+                    
                 }
+                
             }catch(InvalidCommandException e){
                 
             }
