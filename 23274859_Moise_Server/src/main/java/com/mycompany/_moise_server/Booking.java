@@ -58,7 +58,7 @@ public class Booking {
         String bookingDateIn = date;
 
         //defines expected pattern of date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM uuuu");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
 
         try {
 
