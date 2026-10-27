@@ -39,8 +39,24 @@ public class ClientConnectionRun implements Runnable {
             PrintWriter out = new PrintWriter(client_link.getOutputStream(), true);
             
             //read one line of text sent by client
-            String message = in.readLine();
-            if(message.charAt)
+            String clientBooking = in.readLine();
+            try{
+                //trim to remove white space
+                if(clientBooking.trim().isEmpty()){
+                  //if client send an empty booking
+                  throw new InvalidCommandException("Cannot send empty booking.");
+                }else{
+                    String[] parts = clientBooking.trim().split(";");
+                    if(!parts[0].equalsIgnoreCase("book") || !parts[0].equalsIgnoreCase("cancel") || !parts[0].equalsIgnoreCase("list")){
+                        throw new InvalidCommandException("Not a valid command e.g(book, cancel, list)");
+                    }
+                    for(int i=0; i<parts.length; i++){
+                        if(parts[0].equalsIgnoreCase("book"))
+                    }
+                }
+            }catch(InvalidCommandException e){
+                
+            }
             //display the receive client message in server console
             System.out.println();
             
