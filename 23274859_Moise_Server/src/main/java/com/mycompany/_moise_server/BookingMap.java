@@ -64,6 +64,7 @@ public class BookingMap {
         bookings.remove(cancelledBooking);
         //get the current number of bookings
         int numOfBookings = countBookings(b.getMemberName());
+        //message to client
         result = "Cancelled. " + b.getMemberName() + "currently has " + numOfBookings + " booking" + b.serverMsg() + "\n-;";
         return result;
     }
