@@ -114,10 +114,11 @@ public class ClientConnectionRun implements Runnable {
             
             //handle list action, handle earlier since it only needs name
             if(action.equals("list")){
-                //if client as bookings
-                if(bookingMap.countBookings(name)!=0){
-                    return bookingMap.list(name);
+                if(!workshopName.equals("-") || !date.equals("-") || !time.equals(date)){
+                    throw new InvalidCommandException("List action format is e.g(list;name; -;-;-");
                 }
+                //use list method to get all client bookings if it exists
+                return bookingMap.list(name);
             }
 
             if (workshopName.isEmpty()) {
