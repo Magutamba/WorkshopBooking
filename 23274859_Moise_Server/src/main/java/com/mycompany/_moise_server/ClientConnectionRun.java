@@ -92,7 +92,9 @@ public class ClientConnectionRun implements Runnable {
 
             //invalid number of fields
             if (parts.length != 5) {
-                throw new InvalidCommandException("Must provide valid details for all fields (action; name; workshop name; date, time am/pm)");
+                throw new InvalidCommandException(
+                        "Must provide valid details for all fields (action; name; workshop name; date, time am/pm)"
+                );
             }
             //invalid action
             String action = parts[0].trim().toLowerCase();
