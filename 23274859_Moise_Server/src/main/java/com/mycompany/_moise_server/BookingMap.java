@@ -75,17 +75,20 @@ public class BookingMap {
     public synchronized String list(String memberName) {
         //get the number of bookings
         int numOfBookings = countBookings(memberName);
-
+        
         //string buffer to create
         StringBuffer result = new StringBuffer();
 
         result.append(memberName);
         result.append(" currently has ");
+        
         //if  numOfBookings is 1 singular booking otherwise bookings
         result.append(numOfBookings == 1 ? " booking: " : " bookings: ");
-
-        //empty string to hold bookings
-        String item = "";
+        
+        //for empyty bookings
+        if(numOfBookings==0){
+           return result.toString();
+        }
 
         //variable to ensure ; isnlt put before first booking
         boolean first = true;
