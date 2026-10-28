@@ -65,7 +65,8 @@ public class BookingMap {
         //get the current number of bookings
         int numOfBookings = countBookings(b.getMemberName());
         //message to client
-        result = "Cancelled. " + b.getMemberName() + "currently has " + numOfBookings + " booking" + b.serverMsg() + "\n-;";
+        //result = "Cancelled. " + b.getMemberName() + "currently has " + numOfBookings + " booking" + b.serverMsg() + "\n-;";
+        result = "Cancelled. "+list(b.getMemberName());
         return result;
     }
 
@@ -97,7 +98,7 @@ public class BookingMap {
             if (value.getMemberName().equalsIgnoreCase(memberName)) {
                 //after the first booking
                 if (!first) {
-                    result.append("-; ");
+                    result.append(" ; ");
                 }
                 result.append(value.serverMsg());
                 //set to false so next bookings have semicolon
