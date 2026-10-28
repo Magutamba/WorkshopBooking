@@ -145,11 +145,12 @@ public class ClientConnectionRun implements Runnable {
             switch(action){
                 case "book":
                     //use exists method to check for already existing bookings
-                    if (bookingMap.exists(booking)) {
+                    /*if (bookingMap.exists(booking)) {
                         throw new InvalidCommandException("This booking already exists.");
                     } else {
                         return bookingMap.book(booking);
-                    }
+                    }*/
+                    return bookingMap.book(booking);
                 case "cancel" :
                     //cancel booking if it exists
                     /*if (!bookingMap.exists(booking)) {

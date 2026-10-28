@@ -4,7 +4,6 @@
  */
 package com.mycompany._moise_server;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -15,7 +14,8 @@ import java.util.Map;
 public class BookingMap {
 
     //linked hash map for sorted collection
-    LinkedHashMap<Long, Booking> bookings;
+    //variable cannot
+    private final LinkedHashMap<Long, Booking> bookings;
     private static long id = 2000;
 
     public BookingMap() {
@@ -24,12 +24,15 @@ public class BookingMap {
 
     //add a new booking
     //synchronize ensure one thread executes it at a time, prevent simultaneous use that results in conflict
-    public synchronized String book(Booking b) {
+    public synchronized String book(Booking b) throws InvalidCommandException {
+        if (exists(b)) {
+            throw new InvalidCommandException("This booking already exists.");
+        }
         id++;
         //add the new booking to the linkedHashMap
         bookings.put(id, b);
         //get number of bookings
-        int numOfBookings = countBookings(b.getMemberName());
+        //int numOfBookings = countBookings(b.getMemberName());
         //return b.getMemberName() + "currently has" +numOfBookings+"bookings:" + b.serverMsg() + "\n-;";
         return list(b.getMemberName());
 
@@ -46,47 +49,45 @@ public class BookingMap {
             long id = entry.getKey();
             Booking value = entry.getValue();
             //remove booking that matches the booking passed into the method
-            if (value.getMemberName().equalsIgnoreCase(b.getMemberName()) 
-                    && value.getWorkshopName().equalsIgnoreCase(b.getWorkshopName()) 
-                           &&  value.getDate().equalsIgnoreCase(b.getDate())
-                           && value.getTime().equalsIgnoreCase(b.getTime()) )
-            {
-                cancelledBooking=entry.getKey();
+            if (value.getMemberName().equalsIgnoreCase(b.getMemberName())
+                    && value.getWorkshopName().equalsIgnoreCase(b.getWorkshopName())
+                    && value.getDate().equalsIgnoreCase(b.getDate())
+                    && value.getTime().equalsIgnoreCase(b.getTime())) {
+                cancelledBooking = entry.getKey();
                 break;
             }
         }
-                if(cancelledBooking!=null){
-                    //remove the booking
-                    bookings.remove(cancelledBooking);
-                    //get the current number of bookings
-                    int numOfBookings = countBookings(b.getMemberName());
-                    result = "Cancelled. " + b.getMemberName() + "currently has "+numOfBookings + " booking"+b.serverMsg()+"\n-;";
-                }else if(cancelledBooking==null){
-                    throw new InvalidCommandException("Booking does not exist");
-                }
+        if (cancelledBooking == null) {
+            throw new InvalidCommandException("Booking does not exist");
+        }
+        //remove the booking
+        bookings.remove(cancelledBooking);
+        //get the current number of bookings
+        int numOfBookings = countBookings(b.getMemberName());
+        result = "Cancelled. " + b.getMemberName() + "currently has " + numOfBookings + " booking" + b.serverMsg() + "\n-;";
         return result;
     }
-    
+
     //list all the person's booking
     //synchronize ensure one thread executes it at a time, prevent simultaneous use that results in conflict
     public synchronized String list(String memberName) {
         //get the number of bookings
         int numOfBookings = countBookings(memberName);
-        
-         //string buffer to create
-         StringBuffer result = new StringBuffer();
-         
-         result.append(memberName);
-         result.append(" currently has ");
-         //if  numOfBookings is 1 singular booking otherwise bookings
-         result.append(numOfBookings==1 ? " booking: " : " bookings: ");
-         
+
+        //string buffer to create
+        StringBuffer result = new StringBuffer();
+
+        result.append(memberName);
+        result.append(" currently has ");
+        //if  numOfBookings is 1 singular booking otherwise bookings
+        result.append(numOfBookings == 1 ? " booking: " : " bookings: ");
+
         //empty string to hold bookings
         String item = "";
-        
+
         //variable to ensure ; isnlt put before first booking
-        boolean first=true;
-        
+        boolean first = true;
+
         //iterate through map
         for (Map.Entry<Long, Booking> entry : bookings.entrySet()) {
             //get booking
@@ -94,12 +95,12 @@ public class BookingMap {
             //add bookings to
             if (value.getMemberName().equalsIgnoreCase(memberName)) {
                 //after the first booking
-                if(!first){
+                if (!first) {
                     result.append("-; ");
                 }
                 result.append(value.serverMsg());
                 //set to false so next bookings have semicolon
-                first=false;
+                first = false;
             }
         }
         return result.toString();
@@ -109,7 +110,7 @@ public class BookingMap {
     //synchronize ensure one thread executes it at a time, prevent simultaneous use that results in conflict
     public synchronized int countBookings(String name) {
         int count = 0;
-        
+
         for (Map.Entry<Long, Booking> entry : bookings.entrySet()) {
             Booking value = entry.getValue();
             if (value.getMemberName().equalsIgnoreCase(name)) {
@@ -119,21 +120,20 @@ public class BookingMap {
         //return number of bookings
         return count;
     }
-    
+
     //method for existing booking
     //synchronize ensure one thread executes it at a time, prevent simultaneous use that results in conflict
-    public synchronized boolean exists(Booking b){
-        boolean exist=false;
-         //iterate through map
-        for (Map.Entry<Long, Booking> entry : bookings.entrySet()){
+    public synchronized boolean exists(Booking b) {
+        boolean exist = false;
+        //iterate through map
+        for (Map.Entry<Long, Booking> entry : bookings.entrySet()) {
             //get  the booking values
             Booking value = entry.getValue();
             //check if the booking exists
-            if (value.getMemberName().equalsIgnoreCase(b.getMemberName()) 
-                    && value.getWorkshopName().equalsIgnoreCase(b.getWorkshopName()) 
-                           &&  value.getDate().equalsIgnoreCase(b.getDate())
-                           && value.getTime().equalsIgnoreCase(b.getTime()) )
-            {
+            if (value.getMemberName().equalsIgnoreCase(b.getMemberName())
+                    && value.getWorkshopName().equalsIgnoreCase(b.getWorkshopName())
+                    && value.getDate().equalsIgnoreCase(b.getDate())
+                    && value.getTime().equalsIgnoreCase(b.getTime())) {
                 //return true if a booking already exists
                 return true;
             }
