@@ -39,7 +39,7 @@ public class BookingClient {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             //PrintWriter for sending text to the server; true enables automatic flushing after println().
-            PrintWriter out = new PrintWriter(new socket.getOutputStream(), true);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
             //dialog box to store user message
             String userMessage = JOptionPane.showInputDialog(
