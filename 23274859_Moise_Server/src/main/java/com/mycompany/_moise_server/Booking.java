@@ -59,7 +59,7 @@ public class Booking {
         String bookingDateIn = date;
 
         //defines expected pattern of date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
 
         try {
 
@@ -88,7 +88,7 @@ public class Booking {
             //return the date as a string
             return bookingTime.format(timeFormatter);
         }catch(DateTimeParseException e){
-            throw new  InvalidCommandException("Invalid Time format e.g(2:00 pm, 2 am");
+            throw new  InvalidCommandException("Invalid Time format e.g(2 am");
         }
      }
      
