@@ -79,7 +79,7 @@ public class Booking {
          //assign user entered booking time as a String to bookingTime
          String bookingTimeIn = time;
          //defines expected pattern of time
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h a");
         
         try{
             //converts bookingDate to LocalDate and check if it matches pattern in formatter
