@@ -32,7 +32,7 @@ public class BookingClient {
         // Starts a try block so networking and input/output errors can be handled safely.
         try {
             // Creates a TCP socket and immediately attempts to connect to the server identified by host and port.
-            Socket socket = new Socket(host, port);
+            socket = new Socket(host, port);
 
             // Prints confirmation after the TCP connection is successfully established.
             System.out.println("Connected to server.");
