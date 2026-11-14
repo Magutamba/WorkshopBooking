@@ -5,6 +5,7 @@
 package com.mycompany._moise_server;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -59,7 +60,7 @@ public class Booking {
         String bookingDateIn = date;
 
         //defines expected pattern of date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
 
         try {
 
@@ -70,7 +71,7 @@ public class Booking {
             return bookingDate.format(formatter);
 
         } catch (DateTimeParseException e) {
-            throw new InvalidCommandException("Invalid Date format e.g(18 November 2026)");
+            throw new InvalidCommandException("Invalid Date format, use e.g(18 November 2026)");
 
         }
     }
@@ -83,12 +84,12 @@ public class Booking {
         
         try{
             //converts bookingDate to LocalDate and check if it matches pattern in formatter
-            LocalDate bookingTime = LocalDate.parse(bookingTimeIn, timeFormatter);
+            LocalTime bookingTime = LocalTime.parse(bookingTimeIn, timeFormatter);
             
             //return the date as a string
             return bookingTime.format(timeFormatter);
         }catch(DateTimeParseException e){
-            throw new  InvalidCommandException("Invalid Time format e.g(2 am");
+            throw new  InvalidCommandException("Invalid Time format, use e.g(2 am");
         }
      }
      

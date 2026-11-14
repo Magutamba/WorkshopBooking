@@ -23,8 +23,10 @@ public class BookingServer {
     //counts the number of clients accepted by the server
     private static int clientConnections = 0;
     
-    //share BookingMap used by all clients
-    private static final BookingMap bookingMap=new BookingMap();
+    //declare one BookingMap shared by all clients
+    private static final BookingMap bookingMap = new BookingMap();
+    //declare a shared ProcessAction with bookingMap shared by all clients
+    private static final ProcessAction processAction = new ProcessAction(bookingMap);
     
     public static void main(String[] args){
         
@@ -62,8 +64,8 @@ public class BookingServer {
                 // Once connected, accept() returns a Socket for communicating with that client.
                 link = servSock.accept();
                 
-                //handler to communicate with the client, with shared link and bookingMao
-                Runnable resource = new ClientConnectionRun(link, bookingMap);
+                //handler to communicate with the client, with shared link and processAction
+                Runnable resource = new ClientConnectionRun(link,processAction);
                 
                 //seperate thread for the client handler
                 Thread t = new Thread(resource);
