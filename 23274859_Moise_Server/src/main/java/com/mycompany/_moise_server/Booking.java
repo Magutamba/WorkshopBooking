@@ -58,7 +58,7 @@ public class Booking {
     //this method may report InvalidCommandException, run method will catch the exception
     public static String validateDate(String date) throws InvalidCommandException {
         //assign user entered booking date as a String to bookingDate
-        String bookingDateIn = date;
+        String bookingDateIn = date.trim();
 
         //defines expected pattern of date
         DateTimeFormatter formatter =  new DateTimeFormatterBuilder().parseCaseInsensitive()
@@ -80,7 +80,7 @@ public class Booking {
     //this method may report InvalidCommandException, run method will catch the exception
      public static String validateTime(String time) throws InvalidCommandException{
          //assign user entered booking time as a String to bookingTime
-         String bookingTimeIn = time;
+         String bookingTimeIn = time.trim();
          //defines expected pattern of time
         DateTimeFormatter timeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern("h a").toFormatter();
         

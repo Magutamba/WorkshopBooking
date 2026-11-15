@@ -10,7 +10,7 @@ package com.mycompany._moise_server;
  */
 public class BookingURL {
     //
-    String urlLink = getURLDefaultPort();
+    //String urlLink = getURLDefaultPort();
     
 }
 
