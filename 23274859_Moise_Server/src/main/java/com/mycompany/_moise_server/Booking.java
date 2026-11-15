@@ -93,10 +93,6 @@ public class Booking {
         }
      }
      
-    
-//    public String toString(){
-//        return "book;"+memberName+";"+workshopName+";"+date+";"+time;
-//    }
     public String serverMsg(){
         return workshopName+" on "+date+" at "+time;
     }

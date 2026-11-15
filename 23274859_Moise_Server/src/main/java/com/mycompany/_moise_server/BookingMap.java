@@ -83,9 +83,9 @@ public class BookingMap {
         result.append(" currently has ");
         
         //if  numOfBookings is 1 singular booking otherwise bookings
-        result.append(numOfBookings == 1 ? " booking: " : " bookings: ");
+        result.append(numOfBookings == 1 ? "booking " : " bookings ");
         
-        result.append(": ");
+        //result.append(": ");
         //for empyty bookings
         if(numOfBookings==0){
            return result.toString();
