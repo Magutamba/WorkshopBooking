@@ -79,20 +79,8 @@ public class ProcessAction {
             Booking booking = new Booking(name, workshopName, validDate, validTime);
             switch(action){
                 case "book":
-                    //use exists method to check for already existing bookings
-                    /*if (bookingMap.exists(booking)) {
-                        throw new InvalidCommandException("This booking already exists.");
-                    } else {
-                        return bookingMap.book(booking);
-                    }*/
                     return bookingMap.book(booking);
                 case "cancel" :
-                    //cancel booking if it exists
-                    /*if (!bookingMap.exists(booking)) {
-                        throw new InvalidCommandException("This booking doesn't exists.");
-                    } else {
-                       return bookingMap.cancel(booking);
-                    }*/
                     return bookingMap.cancel(booking);
                 default:
                     //satisfies compiler

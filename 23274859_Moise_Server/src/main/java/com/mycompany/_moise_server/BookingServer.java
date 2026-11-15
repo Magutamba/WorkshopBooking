@@ -20,9 +20,6 @@ public class BookingServer {
     //port number on which the server listens
     private static int PORT = 1234;
     
-    //counts the number of clients accepted by the server
-    private static int clientConnections = 0;
-    
     //declare one BookingMap shared by all clients
     private static final BookingMap bookingMap = new BookingMap();
     //declare a shared ProcessAction with bookingMap shared by all clients

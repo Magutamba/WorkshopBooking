@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
  * @author moise
  */
 public class BookingClient {
+
     // Stores the server IP address that the client will try to contact; replace it if the server uses a different address.
     private static String host = "localhost";
     // Stores the server TCP port; it must match the port used by EchoServer.
@@ -42,23 +43,32 @@ public class BookingClient {
 
             //PrintWriter for sending text to the server; true enables automatic flushing after println().
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            //keep client connection open until 
+            while(true){
+                
+                //dialog box to store user message
+                String userMessage = JOptionPane.showInputDialog(
+                        "Enter your  booking in e.g(action; name; workshop name; date, time  3 am/pm), enter Stop to terminate"
+                );
 
-            //dialog box to store user message
-            String userMessage = JOptionPane.showInputDialog(
-                    "Enter your  booking in e.g(action; name; workshop name; date, time  3 am/pm), enter Stop to terminate"
-            );
-
-            // Sends the user's message to the server as one text line.
-            out.println(userMessage);
-
-            // Waits for and reads one complete response line from the server.
-            String serverReply = in.readLine();
-
-            // Displays the response received from the server.
-            System.out.println("Server Reply: " + serverReply);
-
-            // Closes the client socket and releases the network connection and related resources.
-            socket.close();
+                //treat the closing of the dialog box as request to terminate the connection, so server replying null doesn't cause nullpointer exception
+                if(userMessage==null){
+                    userMessage = "Stop";
+                }
+                 // Sends the user's message to the server as one text line.
+                out.println(userMessage);
+                
+                // Waits for and reads one complete response line from the server.
+                String serverReply = in.readLine();
+                
+                // Displays the response received from the server.
+                System.out.println("Server Reply: " + serverReply);
+                
+                if (serverReply==null || serverReply.equalsIgnoreCase("TERMINATE")) {
+                    //break out of while loop, proceed to finally
+                    break;
+                }
+            }
 
         } catch (IOException e) {
             // Prints a readable description of the error.
@@ -68,7 +78,8 @@ public class BookingClient {
             try {
                 System.out.println("Closing Connection: ");
                 //close when there is a successful connection
-                if(socket!=null){
+                if (socket != null) {
+                    // Closes the client socket and releases the network connection and related resources.
                     socket.close();
                 }
             } catch (IOException e2) {

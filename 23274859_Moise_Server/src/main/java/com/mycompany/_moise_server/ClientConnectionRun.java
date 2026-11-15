@@ -47,6 +47,7 @@ public class ClientConnectionRun implements Runnable {
                 while ((clientMessage = in.readLine()) != null) {
                     //terminate if client sends stop
                     if (clientMessage.equalsIgnoreCase("Stop")) {
+                            out.println("TERMINATE");
                             System.out.println("TERMINATE");
                             break;
                     }
