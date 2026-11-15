@@ -7,6 +7,7 @@ package com.mycompany._moise_server;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 
 /**
@@ -60,7 +61,8 @@ public class Booking {
         String bookingDateIn = date;
 
         //defines expected pattern of date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
+        DateTimeFormatter formatter =  new DateTimeFormatterBuilder().parseCaseInsensitive()
+                .appendPattern("d MMMM uuuu").toFormatter();
 
         try {
 
@@ -80,7 +82,7 @@ public class Booking {
          //assign user entered booking time as a String to bookingTime
          String bookingTimeIn = time;
          //defines expected pattern of time
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h a");
+        DateTimeFormatter timeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern("h a").toFormatter();
         
         try{
             //converts bookingDate to LocalDate and check if it matches pattern in formatter
