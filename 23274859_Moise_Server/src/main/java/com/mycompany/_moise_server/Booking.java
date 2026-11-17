@@ -91,7 +91,7 @@ public class Booking {
             //return the date as a string
             return bookingTime.format(timeFormatter);
         }catch(DateTimeParseException e){
-            throw new  InvalidCommandException("Invalid Time format, use e.g(2 am");
+            throw new  InvalidCommandException("Invalid Time format, use e.g(2 am)");
         }
      }
      

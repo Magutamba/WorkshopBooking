@@ -4,102 +4,133 @@
  */
 package com.mycompany._moise_client;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import 
+
 /**
  *
  * @author moise
  */
 public class BookingURL {
-    
-}
 
-//
-//public class URLConnection_Example {
-//
-//    /**
-//     * @param args the command line arguments
-//     */
-//  public static void main(String[] args) throws IOException {
-//        // TODO code application logic here
-//     String urlLink ="http://www.google.com";
-//     try 
-//    {    
-//      URL url = new URL( urlLink);
-//
-//      URLConnection c = url.openConnection();  //A URLConnection instance is obtained 
-//    
-//       // retrieve the communication protocol 
-//       System.out.println("Protocol:- " + url.getProtocol()); 
-//  
-//        // retrieve the hostname of the url 
-//        System.out.println("Hostname:- " + url.getHost()); 
-//  
-//        // retrieve the defalut port 
-//        System.out.println("Default port:- " +  url.getDefaultPort()); 
-//        
-//        // retrive the path of URL 
-//        System.out.println("Path:- " + url.getPath()); 
-//  
-//        // retrive the file name 
-//        System.out.println("File:- " + url.getFile()); 
-//      
-//        
-//        // retrive the fields part of the request message header section
-//        for (int i=0; ; i++) 
-//        {
-//            String name = c.getHeaderFieldKey(i);  // reads the key of the n-th header field.
-//            String value = c.getHeaderField(i);  //reads the value of the n-th header field.
-//    
-//            if (name == null && value == null)     // end of headers
-//            {
-//              break;         
-//            }
-//
-//            if (name == null)     // first line of headers
-//            {
-//              System.out.println("Server HTTP version, Response code:");
-//              System.out.println(value);
-//              System.out.print("\n");
-//              // use it to break down the response header
-//              StringTokenizer st = new StringTokenizer(value," ");
-//              String protocolVersion = st.nextToken();
-//              System.out.println("Protocol Version = "+protocolVersion);
-//              String statusCode = st.nextToken();
-//              System.out.println("HTTP Status codes = "+statusCode);
-//              System.out.println("\n");
-//              
-//              int intCode = new Integer(statusCode).intValue();
-//              
-//              if(intCode==200){
-//                  System.out.println("Yes-URL exists");
-//                  //move to next token 
-//                  break;
-//                  
-//              }else if(intCode==404){
-//                  System.out.println("No-URL does not exit!");
-//              
-//              }
-//              
-//              
-//            }
-//            else
-//            {
-//              //System.out.println(name + "=" + value);
-//            }
-//       }
-//    } 
-//    
-//    catch (MalformedURLException e1) 
-//    {
-//        System.out.println ("URL error");
-//        System.out.println(e1.getMessage());
-//    } 
-//    
-//    catch (IOException e2) {
-//        System.out.println ("IO Exception");
-//        System.out.println(e2.getMessage());
-//    }
-//     
-//  }
-//}
+    String urlLink = ;
 
+    public static void HTTPGETBookings(String urlLink, PrinterWriter out, BufferedReader in) {
 
+        //counters for imported and skipped lines
+        int imported = 0;
+        int skipped = 0;
+        //declare a URL connection  that can be closed in final
+        URLConnection c = null;
+        //reads text file hosted in the s3 bucket online
+        BufferedReader reader = null;
+        try {
+
+            //creates a url
+            URL url = new URL(urlLink);
+
+            //connection instance is obtained
+            c = url.openConnection();
+
+            //reads the text file in the s3 bucket online
+            reader = new BufferedReader(new InputStreamReader(c.getInputStream()));
+
+            //retrieve the first line of the text file
+            String firstLine = reader.readLine();
+
+            //check first line start with members and as a name, and after
+            if (firstLine == null || !firstLine.startsWith("member") || firstLine.substring(7).trim().isEmpty()) {
+                System.out.println("Import failed: Member or name is missing");
+                //stop importing
+                return;
+            }
+
+            //extract name from substring taken after =
+            String memberName = firstLine.substring(7).trim();
+
+            //store each booking
+            String line;
+
+            //continue reading until the end of the text file
+            while ((line = reader.readLine()) != null) {
+                //skip empty lines
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+                //-1 ensures trailing empty string is preserved
+                String[] parts = line.trim().split(";", -1);
+
+                //check the number of fields the booking as
+                if (parts.length != 3) {
+                    System.out.println("Malformed line: " + line + " Booking does not have required number of fields");
+                    skipped++;
+                    //skip the line
+                    continue;
+
+                }
+
+                //remove unecessary spaces from each field
+                String workshop = parts[0].trim();
+                String date = parts[1].trim();
+                String time = parts[2].trim();
+
+                if (workshop.isEmpty() || date.isEmpty() || time.isEmpty()) {
+                    System.out.println("Malformed line: " + line + " Booking must have workshop, date, time.");
+                    skipped++;
+                    continue;
+                }
+
+                //validate date and time
+                try {
+                    date = Booking.validateDate(date);
+                    time = Booking.validateTime(time);
+                } catch (InvalidCommandException e) {
+                    System.out.println("Malformed line: " + line + " Invalid date or time");
+
+                    skipped++;
+                    continue;
+                }
+                //construct the normal booking command expected by ProcessAction
+                String command = "Book; " + memberName + ";" + workshop + "; " + date + ";" + time;
+
+                //send booking through existing TCP connection
+                out.println(command);
+
+                //server reply to process
+                String serverReply = in.readLine();
+
+                //count successful bookings
+                if (serverReply == null) {
+                    System.out.println("Server disconnected unexpectedly during import");
+                    break;
+                }
+
+                //print the server reply
+                System.out.println("Server Reply: " + serverReply);
+                if (serverReply.startsWith("InvalidCommandException")) {
+                    skipped++;
+                } else {
+                    imported++;
+                }
+            }
+
+        } catch (MalformedURLException e1) {
+            System.out.println("URL error:\n" + (e1.getMessage());
+
+        } catch (IOException e2) {
+            System.out.println("IO error:\n" + e2.getMessage());
+        } finally {
+            if (reader != null) {
+                reader.close;
+
+                if (connection != null) {
+                    connection.getInputStream().close();
+                }
+            }
+        }
+        
