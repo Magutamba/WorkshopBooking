@@ -7,22 +7,24 @@ package com.mycompany._moise_client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import /**
-         *
-         * @author moise
-         */
+
+/**
+ *
+ * @author moise
+ */
 
 
 
 
 public class BookingURL {
 
-    String urlLink = ;
+    String urlLink = "https://bookingtxtget.s3.eu-west-1.amazonaws.com/Bookings.txt";
 
-    public static void HTTPGETBookings(String urlLink, PrinterWriter out, BufferedReader in) {
+    public static void HTTPGETBookings(String urlLink, PrintWriter out, BufferedReader in) {
 
         //counters for imported and skipped lines
         int imported = 0;
