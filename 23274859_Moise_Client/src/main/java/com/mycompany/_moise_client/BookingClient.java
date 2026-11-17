@@ -44,44 +44,56 @@ public class BookingClient {
             //PrintWriter for sending text to the server; true enables automatic flushing after println().
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             //keep client connection open until 
-            while(true){
-                
+            while (true) {
+
                 //dialog box to store user message
                 String userMessage = JOptionPane.showInputDialog(
                         "Enter your  booking in e.g(action; name; workshop name; date, time  3 am/pm), enter Stop to terminate"
                 );
 
                 //treat the closing of the dialog box as request to terminate the connection, so server replying null doesn't cause nullpointer exception
-                if(userMessage==null){
+                if (userMessage == null) {
                     userMessage = "Stop";
                 }
+                //trim the userMessage
+                userMessage = userMessage.trim();
                 //check whether user wants to import bookings
-                if(userMessage.equalsIgnoreCase("Import")){
-                    //extract URL
-                    String urlLink = userMessage.substring(userMessage.indexOf(";")+ 1).trim();
+                if (userMessage.toLowerCase().startsWith("import;")) {
+                    String urlLink;
+                    //extract url after colon
+                    urlLink = userMessage.substring(userMessage.indexOf(";") + 1).trim();
                     //check if url is empty
-                    if(urlLink.isEmpty()){
-                        System.out.println("Please provide URL.");
+                    if ( urlLink.isEmpty()) {
+                        System.out.println("Import failed, Please provide URL for Bookings.txt.");
+                        continue;
+
+                    }
+
+                    
+
+                    //check url protocol
+                    if (!urlLink.startsWith("http://") && !urlLink.startsWith("https://")) {
+                        System.out.println("Import failed please provide a valid  HTTP and HTTPS URL.");
                         continue;
                     }
-                    
+
                     //call HTTP GET METHOD to retrieve imports
                     BookingURL.HTTPGETBookings(urlLink, out, in);
-                    
+
                     //return to normal client 
                     continue;
-                    
+
                 }
-                 // Sends the user's message to the server as one text line.
+                // Sends the user's message to the server as one text line.
                 out.println(userMessage);
-                
+
                 // Waits for and reads one complete response line from the server.
                 String serverReply = in.readLine();
-                
+
                 // Displays the response received from the server.
                 System.out.println("Server Reply: " + serverReply);
-                
-                if (serverReply==null || serverReply.equalsIgnoreCase("TERMINATE")) {
+
+                if (serverReply == null || serverReply.equalsIgnoreCase("TERMINATE")) {
                     //break out of while loop, proceed to finally
                     break;
                 }
