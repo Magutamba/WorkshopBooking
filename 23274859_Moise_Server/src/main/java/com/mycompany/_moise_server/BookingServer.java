@@ -22,7 +22,7 @@ public class BookingServer {
     
     //declare one BookingMap shared by all clients
     private static final BookingMap bookingMap = new BookingMap();
-    //declare a shared ProcessAction with bookingMap shared by all clients
+    //declare a shared ProcessAction with bookingMap passed into it shared by all clients
     private static final ProcessAction processAction = new ProcessAction(bookingMap);
     
     public static void main(String[] args){
