@@ -31,7 +31,7 @@ public class BookingServer {
         
         try{
             //create server socket on port 1234
-            //the server beegins listening for client connections
+            //the server begins listening for client connections
             servSock = new ServerSocket(PORT);
  
         }catch(IOException e){
