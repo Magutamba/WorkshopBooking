@@ -55,6 +55,23 @@ public class BookingClient {
                 if(userMessage==null){
                     userMessage = "Stop";
                 }
+                //check whether user wants to import bookings
+                if(userMessage.equalsIgnoreCase("Import")){
+                    //extract URL
+                    String urlLink = userMessage.substring(userMessage.indexOf(";")+ 1).trim();
+                    //check if url is empty
+                    if(urlLink.isEmpty()){
+                        System.out.println("Please provide URL.");
+                        continue;
+                    }
+                    
+                    //call HTTP GET METHOD to retrieve imports
+                    BookingURL.HTTPGETBookings(urlLink, out, in);
+                    
+                    //return to normal client 
+                    continue;
+                    
+                }
                  // Sends the user's message to the server as one text line.
                 out.println(userMessage);
                 
