@@ -10,12 +10,14 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import 
+import /**
+         *
+         * @author moise
+         */
 
-/**
- *
- * @author moise
- */
+
+
+
 public class BookingURL {
 
     String urlLink = ;
@@ -84,7 +86,7 @@ public class BookingURL {
                     skipped++;
                     continue;
                 }
-                
+
                 //construct the normal booking command expected by ProcessAction
                 String command = "Book; " + memberName + ";" + workshop + "; " + date + ";" + time;
 
@@ -110,17 +112,22 @@ public class BookingURL {
             }
 
         } catch (MalformedURLException e1) {
-            System.out.println("URL error:\n" + (e1.getMessage());
+            System.out.println("URL error:\n" + (e1.getMessage()));
 
         } catch (IOException e2) {
             System.out.println("IO error:\n" + e2.getMessage());
         } finally {
+            //close the reader
             if (reader != null) {
-                reader.close;
 
-                if (connection != null) {
-                    connection.getInputStream().close();
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    System.out.println("");
                 }
             }
+            
+            System.out.println("Imported: "+imported+"; Skipped: "+skipped);
         }
-        
+    }
+}
