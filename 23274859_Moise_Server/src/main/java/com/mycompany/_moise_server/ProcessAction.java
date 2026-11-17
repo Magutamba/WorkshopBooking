@@ -10,8 +10,9 @@ package com.mycompany._moise_server;
  */
 //class to process client request and validate it
 public class ProcessAction {
-    //declare BookingMap to keep it as shared field rather than create a new one every time
+    //declare BookingMap reference so this class uses the passed bookingMap and final to prevent reassignment to another BookingMap shared
     private final BookingMap bookingMap;
+    //receive the shared bookingmap instance
     public ProcessAction(BookingMap bookingMap) {
         this.bookingMap = bookingMap;
     }
