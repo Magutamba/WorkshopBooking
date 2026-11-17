@@ -84,17 +84,7 @@ public class BookingURL {
                     skipped++;
                     continue;
                 }
-
-                //validate date and time
-                try {
-                    date = Booking.validateDate(date);
-                    time = Booking.validateTime(time);
-                } catch (InvalidCommandException e) {
-                    System.out.println("Malformed line: " + line + " Invalid date or time");
-
-                    skipped++;
-                    continue;
-                }
+                
                 //construct the normal booking command expected by ProcessAction
                 String command = "Book; " + memberName + ";" + workshop + "; " + date + ";" + time;
 
