@@ -98,10 +98,7 @@ public class Booking {
     public String serverMsg(){
         return workshopName+" on "+date+" at "+time;
     }
-    
-    public String saveFormat(){
-        return memberName+";"+workshopName+";"+date+";"+time;
-    }
+
 }
 
 

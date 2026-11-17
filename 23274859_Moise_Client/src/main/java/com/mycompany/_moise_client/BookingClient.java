@@ -62,6 +62,7 @@ public class BookingClient {
                     String urlLink;
                     //extract url after colon
                     urlLink = userMessage.substring(userMessage.indexOf(";") + 1).trim();
+                    
                     //check if url is empty
                     if ( urlLink.isEmpty()) {
                         System.out.println("Import failed, Please provide URL for Bookings.txt.");
