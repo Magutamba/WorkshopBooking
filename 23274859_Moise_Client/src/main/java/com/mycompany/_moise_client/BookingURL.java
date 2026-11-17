@@ -22,8 +22,6 @@ import java.net.URLConnection;
 
 public class BookingURL {
 
-    String urlLink = "https://bookingtxtget.s3.eu-west-1.amazonaws.com/Bookings.txt";
-
     public static void HTTPGETBookings(String urlLink, PrintWriter out, BufferedReader in) {
 
         //counters for imported and skipped lines
@@ -48,7 +46,7 @@ public class BookingURL {
             String firstLine = reader.readLine();
 
             //check first line start with members and as a name, and after
-            if (firstLine == null || !firstLine.startsWith("member") || firstLine.substring(7).trim().isEmpty()) {
+            if (firstLine == null || !firstLine.startsWith("member=") || firstLine.substring(7).trim().isEmpty()) {
                 System.out.println("Import failed: Member or name is missing");
                 //stop importing
                 return;
