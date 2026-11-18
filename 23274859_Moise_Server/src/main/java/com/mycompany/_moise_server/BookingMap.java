@@ -84,7 +84,7 @@ public class BookingMap {
         
         //for empyty bookings
         if(numOfBookings==0){
-            result.append(" 0 bookings");
+            result.append("0 bookings");
            return result.toString();
         }
         
