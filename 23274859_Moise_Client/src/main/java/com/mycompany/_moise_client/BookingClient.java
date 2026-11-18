@@ -48,7 +48,9 @@ public class BookingClient {
 
                 //dialog box to store user message
                 String userMessage = JOptionPane.showInputDialog(
-                        "Enter your  booking in e.g(action; name; workshop name; date, time  3 am/pm), enter Stop to terminate"
+                        "To add a booking enter (book; name; workshop name; date, time  3 am/pm), enter Stop to terminate connection\n"
+                                + " For a list of bookings enter (cancel;name;-;-;-)\n For cancelling a booking enter(list; name; workshop name; date, time  3 am/pm)\n"
+                                + "Enter Stop to close connection."
                 );
 
                 //treat the closing of the dialog box as request to terminate the connection, so server replying null doesn't cause nullpointer exception
