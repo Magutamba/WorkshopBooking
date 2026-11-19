@@ -28,8 +28,8 @@ public class BookingUnitTests {
 
     // Stores the server IP address that the client will try to contact; replace it if the server uses a different address.
     private static String host = "localhost";
-    // Stores the server TCP port; it must match the port used by EchoServer.
-    private static int port = 1234;
+    // Stores the server test TCP port; it must match the port used by EchoServer.
+    private static int port = 1235;
 //    public BookingUnitTests() {
 //    }
 

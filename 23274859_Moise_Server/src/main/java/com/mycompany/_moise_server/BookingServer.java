@@ -56,7 +56,6 @@ public class BookingServer {
         }while(true);
         
     }
-    }
         //accept a client connection and start a thread
         private static void run(){
             //declare a socket for communication with a client
