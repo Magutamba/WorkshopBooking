@@ -54,6 +54,7 @@ public class BookingURL {
 
             //extract name from substring taken after =
             String memberName = firstLine.substring(7).trim();
+            
 
             //store each booking
             String line;

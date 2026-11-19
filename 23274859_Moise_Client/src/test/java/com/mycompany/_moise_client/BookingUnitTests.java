@@ -5,6 +5,7 @@
 package com.mycompany._moise_client;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -112,7 +113,7 @@ public class BookingUnitTests {
 
                 replies[i] = results.get(i).get(10, TimeUnit.SECONDS);
                 //display the response
-                System.out.println("Client" + (i + 1) + "Server Reply: " + replies[i]);
+                System.out.println("Client " + (i + 1) + "Server Reply: " + replies[i]);
 
                 //the server never actually returned a response
                 assertNotNull(replies[i]);
@@ -152,7 +153,7 @@ public class BookingUnitTests {
 
         //client 2 booking fails due to date not being provided
         assertTrue(replies[1].contains("InvalidCommandException:"));
-        assertTrue(replies[1].contains("Date as to be provided"));
+        assertTrue(replies[1].contains("Must provide valid details for all fields (action; name; workshop name; date, time am/pm)"));
 
         //client 3 fails due to an invalid action being used
         assertTrue(replies[2].contains("InvalidCommandException:"));
@@ -182,10 +183,41 @@ public class BookingUnitTests {
 
             //call HTTP GET METHOD to retrieve imports
             BookingURL.HTTPGETBookings(urlLink, out, in);
-            
-            //check that the imported bookings reached the server
 
+            //request imported member's bookings from server
+            out.println("list;Moïse;-;-;-");
+
+            //read server reply
+            String serverReply = in.readLine();
+
+            //check that the server returned a response
+            assertNotNull(serverReply);
+
+            //check imported member exists
+            assertTrue(serverReply.contains("Moïse"));
+            assertTrue(serverReply.contains("Python Basics on 18 November 2026 at 2 pm"));
+            assertTrue(serverReply.contains("Java 25 Intermediate on 18 July 2028 at 4 am"));
+            assertTrue(serverReply.contains("Web Development Advanced on 12 December 2012 at 8 pm"));
+            assertTrue(serverReply.contains("Csharp Developing on 3 April 2025 at 6 pm"));
+            assertTrue(serverReply.contains("currently has bookings"));
+
+            //check that the imported bookings reached the server
+        } catch (IOException e) {
+            // Prints a readable description of the error.
+            System.out.println("Client error: " + e.getMessage());
+        } finally {
+
+            try {
+                System.out.println("Closing Connection: ");
+                //close when there is a successful connection
+                if (socket != null) {
+                    // Closes the client socket and releases the network connection and related resources.
+                    socket.close();
+                }
+            } catch (IOException e2) {
+                System.out.println("Unable to disconnect!");
+                System.exit(1);
+            }
         }
     }
-
 }
