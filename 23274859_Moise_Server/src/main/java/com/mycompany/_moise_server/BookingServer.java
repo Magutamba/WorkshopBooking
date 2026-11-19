@@ -13,6 +13,7 @@ import java.net.Socket;
  * @author moise
  */
 //main Booking server class, listens to incoming clientconnections and asssigns each to a seperate ClientConnectionRun thread
+
 public class BookingServer {
     //Serverscoket listens for client requesting a connection
     private static ServerSocket servSock;
@@ -27,8 +28,13 @@ public class BookingServer {
     private static final ProcessAction processAction = new ProcessAction(bookingMap);
     
     public static void main(String[] args){
+        //use method to start server using port, to allow the tests to no effect the ordinary process between server and client
+        startServer(PORT);
         
-        System.out.println("Opening port...\n");
+    }
+    //server can now start using a specified port
+    public static void startServer(int port){
+         System.out.println("Opening port...\n");
         
         try{
             //create server socket on port 1234
@@ -49,6 +55,7 @@ public class BookingServer {
             run();
         }while(true);
         
+    }
     }
         //accept a client connection and start a thread
         private static void run(){
