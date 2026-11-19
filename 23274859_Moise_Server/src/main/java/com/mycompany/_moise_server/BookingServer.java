@@ -18,7 +18,8 @@ public class BookingServer {
     private static ServerSocket servSock;
     
     //port number on which the server listens
-    private static int PORT = 1234;
+    private static final int PORT = 1234;
+    
     
     //declare one BookingMap shared by all clients
     private static final BookingMap bookingMap = new BookingMap();
