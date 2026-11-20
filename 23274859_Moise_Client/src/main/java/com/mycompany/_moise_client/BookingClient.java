@@ -1,0 +1,123 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany._moise_client;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author moise
+ */
+public class BookingClient {
+
+    // Stores the server IP address that the client will try to contact; replace it if the server uses a different address.
+    private static String host = "localhost";
+    // Stores the server TCP port; it must match the port used by EchoServer.
+    private static int port = 1234;
+
+    public static void main(String[] args) {
+        run();
+    }
+    //connect to server and start a thread
+
+    private static void run() {
+        //declare a socket and intialise to null
+        Socket socket = null;
+        // Starts a try block so networking and input/output errors can be handled safely.
+        try {
+            // Creates a TCP socket and immediately attempts to connect to the server identified by host and port.
+            socket = new Socket(host, port);
+
+            // Prints confirmation after the TCP connection is successfully established.
+            System.out.println("Connected to server.");
+
+            //BufferedReader for efficiently reading text sent by the server.
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            //PrintWriter for sending text to the server; true enables automatic flushing after println().
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            //keep client connection open until 
+            while (true) {
+
+                //dialog box to store user message
+                String userMessage = JOptionPane.showInputDialog(
+                        "To add a booking enter (book; name; workshop name; date, time  3 am/pm), enter Stop to terminate connection\n"
+                                + " For a list of bookings enter (cancel;name;-;-;-)\n For cancelling a booking enter(list; name; workshop name; date, time  3 am/pm)\n"
+                                + "Enter Stop to close connection."
+                );
+
+                //treat the closing of the dialog box as request to terminate the connection, so server replying null doesn't cause nullpointer exception
+                if (userMessage == null) {
+                    userMessage = "Stop";
+                }
+                //trim the userMessage
+                userMessage = userMessage.trim();
+                //check whether user wants to import bookings
+                if (userMessage.toLowerCase().startsWith("import;")) {
+                    String urlLink;
+                    //extract url after colon
+                    urlLink = userMessage.substring(userMessage.indexOf(";") + 1).trim();
+                    
+                    //check if url is empty
+                    if ( urlLink.isEmpty()) {
+                        System.out.println("Import failed, Please provide URL for Bookings.txt.");
+                        continue;
+
+                    }
+
+                    
+
+                    //check url protocol
+                    if (!urlLink.startsWith("http://") && !urlLink.startsWith("https://")) {
+                        System.out.println("Import failed please provide a valid  HTTP and HTTPS URL.");
+                        continue;
+                    }
+
+                    //call HTTP GET METHOD to retrieve imports
+                    BookingURL.HTTPGETBookings(urlLink, out, in);
+
+                    //return to normal client 
+                    continue;
+
+                }
+                // Sends the user's message to the server as one text line.
+                out.println(userMessage);
+
+                // Waits for and reads one complete response line from the server.
+                String serverReply = in.readLine();
+
+                // Displays the response received from the server.
+                System.out.println("Server Reply: " + serverReply);
+
+                if (serverReply == null || serverReply.equalsIgnoreCase("TERMINATE")) {
+                    //break out of while loop, proceed to finally
+                    break;
+                }
+            }
+
+        } catch (IOException e) {
+            // Prints a readable description of the error.
+            System.out.println("Client error: " + e.getMessage());
+        } finally {
+
+            try {
+                System.out.println("Closing Connection: ");
+                //close when there is a successful connection
+                if (socket != null) {
+                    // Closes the client socket and releases the network connection and related resources.
+                    socket.close();
+                }
+            } catch (IOException e2) {
+                System.out.println("Unable to disconnect!");
+                System.exit(1);
+            }
+        }
+    }
+}
